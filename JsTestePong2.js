@@ -5,8 +5,9 @@ window.onload = ()=> {
 
   //test set
   //  set_brush_color(my.brush ,'#45A05A');
-  //  draw_rectangle({brush: my.brush, left: 1, top: 1, width: 100, height: 100});
-
+  //  draw_rectangle({brush: my.brush, x_axis: 15, y_axis: 25, width: 500, height: 100});
+  //  set_brush_font({brush: my.brush, font_size: 40, font_family: 'Helvetica'})
+  //  write_text({brush: my.brush, x_axis: 50, y_axis: 150,text: 'test text!'})
 }
 
 const log = (what = '', where = 'console')=> {
@@ -33,6 +34,14 @@ let set_brush_color = (brush,hexadecimal_color)=> {
   brush.fillStyle = hexadecimal_color;
 }
 
-let draw_rectangle = ({brush, left, top, width, height})=> {
-  brush.fillRect(left, top, width, height);
+let draw_rectangle = ({brush, x_axis, y_axis, width, height})=> {
+  brush.fillRect(x_axis, y_axis, width, height);
+}
+
+let set_brush_font = ({brush, font_size, font_family})=> {
+  brush.font = `${font_size}px ${font_family}`;
+}
+
+let write_text = ({brush,  x_axis, y_axis, text})=> {
+  brush.fillText(text, x_axis, y_axis);
 }
