@@ -16,6 +16,11 @@ const log = (what = '', where = 'console')=> {
   if(where == 'html_tag_notice') return document.querySelector('#your_item');
 }
 
+let fix_canvas_proportions = (canvas)=> {
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+}
+
 const setup_drawing_tools = ()=> {
   let temporary_canvas = document.querySelector('#gameCanvas');
   let temporary_brush = temporary_canvas.getContext('2d');
@@ -24,14 +29,10 @@ const setup_drawing_tools = ()=> {
            brush: temporary_brush };
 }
 
-
 let set_brush_color = (brush,hexadecimal_color)=> {
   brush.fillStyle = hexadecimal_color;
 }
+
 let draw_rectangle = ({brush, left, top, width, height})=> {
   brush.fillRect(left, top, width, height);
-}
-let fix_canvas_proportions = (canvas)=> {
-  canvas.height = window.innerHeight;
-  canvas.width = window.innerWidth;
 }
