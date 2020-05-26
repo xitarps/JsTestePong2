@@ -4,12 +4,13 @@ window.onload = ()=> {
   let screen_width = window.innerWidth;
   let half_screen_width = screen_width/2;
   let screen_height = window.innerHeight;
-  let fps = 30;
+  let fps = 60;
   let player = {y_position: 300};
   let computer = {y_position: 300};
-  let ball = {x_axis: half_screen_width-5, y_axis: screen_height/2, speed: 100,
-              x_direction: random_start_direction(),
-              y_direction: random_start_direction()};
+  let start_direction = random_start_direction()
+  let ball = {x_axis: half_screen_width-5, y_axis: screen_height/2, speed: 150,
+              x_direction: start_direction[0],
+              y_direction: start_direction[1]};
   fix_canvas_proportions(my.canvas);
 
 
@@ -86,7 +87,32 @@ let track_player_move = (player)=> {
   });
 }
 let random_start_direction = ()=> {
-  return (Math.round(Math.random()) * 2 - 1)*(Math.round(Math.random()) * 1 + 1)
+  arr = [];
+  
+  // (1 or -1 * 2) => 2 or -2
+  arr.push((Math.round(Math.random()) * 2 - 1) * 2);
+  // 1 or -1
+  arr.push(Math.round(Math.random()) * 2 - 1);
+  // (1 or -1 * 2) => 2 or -2
+  arr.push((Math.round(Math.random()) * 2 - 1) * 2);
+  
+  
+  //shuffle (Fisher-Yates Algorithm)
+  for(let i = arr.length - 1; i > 0; i--){
+    let j = Math.floor(Math.random() * i);
+    let temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
+  for(let i = arr.length - 1; i > 0; i--){
+    let j = Math.floor(Math.random() * i);
+    let temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
+  
+  arr.pop();
+  return arr;
 }
 
 let ball_move = (ball)=> {
