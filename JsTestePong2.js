@@ -12,6 +12,9 @@ window.onload = ()=> {
 
   draw_flipper({brush: my.brush, color:'#FFFFFF', 
                 x_axis: 0, y_axis: 100, width: 15, height: 70})
+
+  draw_flipper({brush: my.brush, color:'#FFFFFF', 
+                x_axis: screen_width - 15, y_axis: 300, width: 15, height: 70})
 }
 
 const log = (what = '', where = 'console')=> {
