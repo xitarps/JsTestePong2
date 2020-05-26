@@ -7,13 +7,14 @@ window.onload = ()=> {
   let fps = 30;
   let player = {y_position: 300}
   let computer = {y_position: 300}
+  let ball = {x_axis: half_screen_width-5, y_axis: screen_height/2}
   fix_canvas_proportions(my.canvas)
 
-  
+
 
   track_player_move(player)
 
-  render_game_screen({brush: my.brush, fps, player, computer,
+  render_game_screen({brush: my.brush, fps, player, computer, ball,
                       screen_width, screen_height,
                       half_screen_width})
 }
@@ -71,13 +72,19 @@ let draw_flipper = ({brush, color, x_axis, y_axis, width, height})=> {
                   width, height})
 }
 
+let draw_ball = ({brush, color, x_axis, y_axis, width, height})=> {
+  set_brush_color(brush, color);
+  draw_rectangle({brush, x_axis, y_axis,
+                  width, height})
+}
+
 let track_player_move = (player)=> {
   document.addEventListener("mousemove", (event)=>{
     player.y_position = event.clientY;
   });
 }
 
-let render_game_screen = ({brush, fps, player,
+let render_game_screen = ({brush, fps, player, ball,
                            screen_width, screen_height, half_screen_width})=> {
   setInterval(() => {
 
@@ -96,6 +103,11 @@ let render_game_screen = ({brush, fps, player,
     draw_flipper({brush, color:'#FFFFFF', 
                   x_axis: screen_width - 15, y_axis: 300,
                   width: 15, height: 60});
+
+    //computer
+    draw_ball({brush, color:'#FFFFFF', 
+               x_axis: ball.x_axis, y_axis: ball.y_axis,
+               width: 10, height: 10});
 
     set_brush_font({brush, font_size: 1.5, font_family: 'Quantico' })
     write_text({brush,  x_axis: 20, y_axis: 30, text: `${fps} fps`})
