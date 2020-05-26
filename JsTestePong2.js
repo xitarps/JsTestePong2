@@ -4,6 +4,8 @@ window.onload = ()=> {
   let screen_width = window.innerWidth;
   let half_screen_width = screen_width/2;
   let screen_height = window.innerHeight;
+  let fps = 30;
+  let player = {y_position: 300}
   fix_canvas_proportions(my.canvas)
 
   draw_field({brush: my.brush, field_color: '#081605',
@@ -11,12 +13,16 @@ window.onload = ()=> {
               height: screen_height, half: half_screen_width})
 
   draw_flipper({brush: my.brush, color:'#FFFFFF', 
-                x_axis: 0, y_axis: 100, width: 15, height: 70})
+                x_axis: 0, y_axis: 100, width: 15, height: 60})
 
   draw_flipper({brush: my.brush, color:'#FFFFFF', 
-                x_axis: screen_width - 15, y_axis: 300, width: 15, height: 70})
+                x_axis: screen_width - 15, y_axis: 300, width: 15, height: 60})
 
-  track_player_move(my.brush)
+  track_player_move(player)
+
+  render_game_screen({brush: my.brush, fps: fps, player: player,
+                      screen_width: screen_width, screen_height: screen_height,
+                      half_screen_width: half_screen_width})
 }
 
 const log = (what = '', where = 'console')=> {
@@ -68,12 +74,37 @@ let draw_field = ({brush, field_color, lines_color, width, height, half})=> {
 
 let draw_flipper = ({brush, color, x_axis,y_axis, width, height})=> {
   set_brush_color(brush, color);
-  draw_rectangle({brush:brush, x_axis:x_axis, y_axis:y_axis, width:width, height:height})
+  draw_rectangle({brush:brush, x_axis:x_axis, y_axis:y_axis,
+                  width:width, height:height})
 }
 
-let track_player_move =(brush)=>{
+let track_player_move = (player)=> {
   document.addEventListener("mousemove", (event)=>{
-    draw_flipper({brush: brush, color:'#FFFFFF', 
-                  x_axis: 0, y_axis: event.clientY, width: 15, height: 70})
+    player.y_position = event.clientY;
   });
+}
+
+let render_game_screen = ({brush, fps, player,
+                           screen_width, screen_height, half_screen_width})=> {
+  setInterval(() => {
+
+    
+
+    draw_field({brush: brush, field_color: '#081605',
+                lines_color: '#FFFFFF', width: screen_width,
+                height: screen_height, half: half_screen_width});
+
+    //player
+    draw_flipper({brush: brush, color:'#FFFFFF', 
+                  x_axis: 0, y_axis: player.y_position-30,
+                  width: 15, height: 60});
+    
+    //computer
+    draw_flipper({brush: brush, color:'#FFFFFF', 
+                  x_axis: 0, y_axis: player.y_position-30,
+                  width: 15, height: 60});
+
+    set_brush_font({brush: brush, font_size: 14, font_family: 'helvetica' })
+    write_text({brush: brush,  x_axis: 10, y_axis: 30, text: 'texto'})
+  }, fps/1000);
 }
