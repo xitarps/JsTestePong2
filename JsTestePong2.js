@@ -54,7 +54,7 @@ let draw_rectangle = ({brush, x_axis, y_axis, width, height})=> {
 }
 
 let set_brush_font = ({brush, font_size, font_family})=> {
-  brush.font = `${font_size}px ${font_family}`;
+  brush.font = `${font_size}em ${font_family}`;
 }
 
 let write_text = ({brush,  x_axis, y_axis, text})=> {
@@ -104,7 +104,7 @@ let render_game_screen = ({brush, fps, player,
                   x_axis: 0, y_axis: player.y_position-30,
                   width: 15, height: 60});
 
-    set_brush_font({brush: brush, font_size: 14, font_family: 'helvetica' })
-    write_text({brush: brush,  x_axis: 10, y_axis: 30, text: 'texto'})
-  }, fps/1000);
+    set_brush_font({brush: brush, font_size: 1.5, font_family: 'Quantico' })
+    write_text({brush: brush,  x_axis: 20, y_axis: 30, text: `${fps} fps`})
+  }, 1000/fps);
 }
