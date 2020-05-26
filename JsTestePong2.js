@@ -7,8 +7,9 @@ window.onload = ()=> {
   let fps = 30;
   let player = {y_position: 300};
   let computer = {y_position: 300};
-  let ball = {x_axis: half_screen_width-5, y_axis: screen_height/2,
-              speed: 100, x_direction: -1, y_direction: 1};
+  let ball = {x_axis: half_screen_width-5, y_axis: screen_height/2, speed: 100,
+              x_direction: random_start_direction(),
+              y_direction: random_start_direction()};
   fix_canvas_proportions(my.canvas);
 
 
@@ -83,6 +84,9 @@ let track_player_move = (player)=> {
   document.addEventListener("mousemove", (event)=>{
     player.y_position = event.clientY;
   });
+}
+let random_start_direction = ()=> {
+  return (Math.round(Math.random()) * 2 - 1)*(Math.round(Math.random()) * 1 + 1)
 }
 
 let ball_move = (ball)=> {
