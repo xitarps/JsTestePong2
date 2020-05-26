@@ -9,15 +9,7 @@ window.onload = ()=> {
   let computer = {y_position: 300}
   fix_canvas_proportions(my.canvas)
 
-  draw_field({brush: my.brush, field_color: '#081605',
-              lines_color: '#FFFFFF', width: screen_width,
-              height: screen_height, half: half_screen_width})
-
-  draw_flipper({brush: my.brush, color:'#FFFFFF', 
-                x_axis: 0, y_axis: 100, width: 15, height: 60})
-
-  draw_flipper({brush: my.brush, color:'#FFFFFF', 
-                x_axis: screen_width - 15, y_axis: 300, width: 15, height: 60})
+  
 
   track_player_move(player)
 
@@ -101,8 +93,8 @@ let render_game_screen = ({brush, fps, player,
                   width: 15, height: 60});
     
     //computer
-    draw_flipper({brush: brush, color:'#FFFFFF', 
-                  x_axis: 0, y_axis: player.y_position-30,
+    draw_flipper({brush, color:'#FFFFFF', 
+                  x_axis: screen_width - 15, y_axis: 300,
                   width: 15, height: 60});
 
     set_brush_font({brush, font_size: 1.5, font_family: 'Quantico' })
