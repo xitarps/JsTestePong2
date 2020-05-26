@@ -9,6 +9,9 @@ window.onload = ()=> {
   draw_field({brush: my.brush, field_color: '#081605',
               lines_color: '#FFFFFF', width: screen_width,
               height: screen_height, half: half_screen_width})
+
+  draw_flipper({brush: my.brush, color:'#FFFFFF', 
+                x_axis: 0, y_axis: 100, width: 15, height: 70})
 }
 
 const log = (what = '', where = 'console')=> {
@@ -47,7 +50,7 @@ let write_text = ({brush,  x_axis, y_axis, text})=> {
   brush.fillText(text, x_axis, y_axis);
 }
 
-function draw_field({brush, field_color, lines_color, width, height, half}){
+let draw_field = ({brush, field_color, lines_color, width, height, half})=> {
 
   set_brush_color(brush,field_color);
   draw_rectangle({brush: brush, x_axis: 0, y_axis: 0,
@@ -56,4 +59,9 @@ function draw_field({brush, field_color, lines_color, width, height, half}){
   set_brush_color(brush,lines_color);
   draw_rectangle({brush: brush, x_axis: half - 5, y_axis: 0,
                   width: 10, height: height});
+}
+
+let draw_flipper = ({brush, color, x_axis,y_axis, width, height})=> {
+  set_brush_color(brush, color);
+  draw_rectangle({brush:brush, x_axis:x_axis, y_axis:y_axis, width:width, height:height})
 }
