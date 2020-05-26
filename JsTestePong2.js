@@ -6,6 +6,7 @@ window.onload = ()=> {
   let screen_height = window.innerHeight;
   let fps = 30;
   let player = {y_position: 300}
+  let computer = {y_position: 300}
   fix_canvas_proportions(my.canvas)
 
   draw_field({brush: my.brush, field_color: '#081605',
@@ -20,9 +21,9 @@ window.onload = ()=> {
 
   track_player_move(player)
 
-  render_game_screen({brush: my.brush, fps: fps, player: player,
-                      screen_width: screen_width, screen_height: screen_height,
-                      half_screen_width: half_screen_width})
+  render_game_screen({brush: my.brush, fps, player, computer,
+                      screen_width, screen_height,
+                      half_screen_width})
 }
 
 const log = (what = '', where = 'console')=> {
@@ -64,18 +65,18 @@ let write_text = ({brush,  x_axis, y_axis, text})=> {
 let draw_field = ({brush, field_color, lines_color, width, height, half})=> {
 
   set_brush_color(brush,field_color);
-  draw_rectangle({brush: brush, x_axis: 0, y_axis: 0,
-                  width: width, height: height});
+  draw_rectangle({brush, x_axis: 0, y_axis: 0,
+                  width, height});
 
   set_brush_color(brush,lines_color);
   draw_rectangle({brush: brush, x_axis: half - 5, y_axis: 0,
                   width: 10, height: height});
 }
 
-let draw_flipper = ({brush, color, x_axis,y_axis, width, height})=> {
+let draw_flipper = ({brush, color, x_axis, y_axis, width, height})=> {
   set_brush_color(brush, color);
-  draw_rectangle({brush:brush, x_axis:x_axis, y_axis:y_axis,
-                  width:width, height:height})
+  draw_rectangle({brush, x_axis, y_axis,
+                  width, height})
 }
 
 let track_player_move = (player)=> {
@@ -90,12 +91,12 @@ let render_game_screen = ({brush, fps, player,
 
     
 
-    draw_field({brush: brush, field_color: '#081605',
+    draw_field({brush, field_color: '#081605',
                 lines_color: '#FFFFFF', width: screen_width,
                 height: screen_height, half: half_screen_width});
 
     //player
-    draw_flipper({brush: brush, color:'#FFFFFF', 
+    draw_flipper({brush, color:'#FFFFFF', 
                   x_axis: 0, y_axis: player.y_position-30,
                   width: 15, height: 60});
     
@@ -104,7 +105,7 @@ let render_game_screen = ({brush, fps, player,
                   x_axis: 0, y_axis: player.y_position-30,
                   width: 15, height: 60});
 
-    set_brush_font({brush: brush, font_size: 1.5, font_family: 'Quantico' })
-    write_text({brush: brush,  x_axis: 20, y_axis: 30, text: `${fps} fps`})
+    set_brush_font({brush, font_size: 1.5, font_family: 'Quantico' })
+    write_text({brush,  x_axis: 20, y_axis: 30, text: `${fps} fps`})
   }, 1000/fps);
 }
