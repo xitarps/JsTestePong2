@@ -15,6 +15,8 @@ window.onload = ()=> {
 
   draw_flipper({brush: my.brush, color:'#FFFFFF', 
                 x_axis: screen_width - 15, y_axis: 300, width: 15, height: 70})
+
+  track_player_move(my.brush)
 }
 
 const log = (what = '', where = 'console')=> {
@@ -67,4 +69,11 @@ let draw_field = ({brush, field_color, lines_color, width, height, half})=> {
 let draw_flipper = ({brush, color, x_axis,y_axis, width, height})=> {
   set_brush_color(brush, color);
   draw_rectangle({brush:brush, x_axis:x_axis, y_axis:y_axis, width:width, height:height})
+}
+
+let track_player_move =(brush)=>{
+  document.addEventListener("mousemove", (event)=>{
+    draw_flipper({brush: brush, color:'#FFFFFF', 
+                  x_axis: 0, y_axis: event.clientY, width: 15, height: 70})
+  });
 }
