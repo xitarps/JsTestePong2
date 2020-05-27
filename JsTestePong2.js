@@ -230,6 +230,11 @@ let render_game_screen = ({brush, fps, flipper_size, player, computer, ball,
        score.computer == score.max){ 
 
          clearInterval(in_game);
+         set_brush_color(brush,'#081605');
+         draw_rectangle({brush, x_axis:0, y_axis:0, width: screen_width, height: screen_height});
+         set_brush_color(brush,'#FFFFFF');
+         let message = (score.player>score.computer)? 'You win :)!' : ' You lose :(';
+         write_text({brush,  x_axis: screen_width/2-60, y_axis: screen_height/2, text: message });
     }
 
   }, 1000/fps);
