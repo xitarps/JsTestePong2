@@ -6,7 +6,7 @@ window.onload = ()=> {
   const screen_height = window.innerHeight;
   const fps = 60;
   const flipper_size = 60;
-  let score = {player: 0, computer: 0};
+  let score = {player: 0, computer: 0, max: 5};
   let player = {y_position: 300};
   let computer = {y_position: 50};
   let start_direction = random_start_direction();
@@ -121,9 +121,8 @@ let random_start_direction = ()=> {
   return arr;
 }
 
-let score_treatment = (ball, score, screen_height, screen_width)=> {
-  set_ball_in_the_middle(ball, screen_height, screen_width)
-  
+let score_treatment = (ball, screen_height, screen_width)=> {
+  set_ball_in_the_middle(ball, screen_height, screen_width);
 }
 let set_ball_in_the_middle= (ball, screen_height, screen_width)=>{
   ball.x_axis = (screen_width/2)-(ball.size/2);
@@ -150,8 +149,8 @@ let check_ball_bounce = (ball, flipper_size, screen_height,screen_width,player,
 
 let check_if_ball_touching_wall = (ball, screen_height, screen_width, score)=> {
   if(ball.y_axis >= screen_height || ball.y_axis <= 0) ball_bounce(ball,'y');
-  if(ball.x_axis >= screen_width){score.player++; score_treatment(ball, score, screen_height, screen_width)}
-  if(ball.x_axis <= 0){score.computer++; score_treatment(ball, score, screen_height, screen_width)}
+  if(ball.x_axis >= screen_width){score.player++; score_treatment(ball, screen_height, screen_width)}
+  if(ball.x_axis <= 0){score.computer++; score_treatment(ball, screen_height, screen_width)}
 }
 
 let check_if_ball_touching_flipper = (ball, flipper_size, screen_height, 
@@ -199,7 +198,7 @@ let ball_bounce = (ball,colision_position)=> {
 let render_game_screen = ({brush, fps, flipper_size, player, computer, ball,
                            screen_width, screen_height, half_screen_width,
                            score})=> {
-  setInterval(() => {
+  let in_game = setInterval(() => {
 
     draw_field({brush, field_color: '#081605',
                 lines_color: '#FFFFFF', width: screen_width,
@@ -225,6 +224,13 @@ let render_game_screen = ({brush, fps, flipper_size, player, computer, ball,
     write_text({brush,  x_axis: 20, y_axis: 30, text: `${fps} fps`});
     write_text({brush,  x_axis: half_screen_width-150, y_axis: 70, text: `Player: ${score.player}`});
     write_text({brush,  x_axis: half_screen_width+30, y_axis: 70, text: `Computer: ${score.computer}`});
+
+    //game end
+    if(score.player == score.max ||
+       score.computer == score.max){ 
+
+         clearInterval(in_game);
+    }
 
   }, 1000/fps);
 }
