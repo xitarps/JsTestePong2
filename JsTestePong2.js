@@ -9,7 +9,7 @@ window.onload = ()=> {
   let score = {player: 0, computer: 0, max: 5};
   let player = {y_position: 300};
   let computer = {y_position: 400};
-  let dificulty = 3;
+  let difficulty = 3;
   let start_direction = random_start_direction();
   let ball = {x_axis: half_screen_width-5, y_axis: screen_height/2, speed: 150,
               size: 10,
@@ -20,7 +20,7 @@ window.onload = ()=> {
 
 
   track_player_move(player);
-  track_computer_move(computer, ball, flipper_size, dificulty);
+  track_computer_move(computer, ball, flipper_size, difficulty);
   ball_move(ball);
   check_ball_bounce(ball, flipper_size, screen_height,screen_width,player,
                     computer, score);
@@ -95,7 +95,7 @@ let track_player_move = (player)=> {
   });
 }
 
-let track_computer_move = (computer, ball, flipper_size, dificulty)=> {
+let track_computer_move = (computer, ball, flipper_size, difficulty)=> {
   setInterval(() => {
     if (ball.y_axis <= computer.y_position + flipper_size/2){
       computer.y_position -= 1;
@@ -103,7 +103,7 @@ let track_computer_move = (computer, ball, flipper_size, dificulty)=> {
     if (ball.y_axis >= computer.y_position - flipper_size/2 + ball.size){
       computer.y_position += 1;
     }
-  }, 1000/(ball.speed * dificulty));
+  }, 1000/(ball.speed * difficulty));
   
 }
 
