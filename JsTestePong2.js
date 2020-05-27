@@ -5,10 +5,12 @@ window.onload = ()=> {
   let half_screen_width = screen_width/2;
   let screen_height = window.innerHeight;
   let fps = 60;
+  let flipper_size = 60;
   let player = {y_position: 300};
-  let computer = {y_position: 500};
+  let computer = {y_position: 50};
   let start_direction = random_start_direction()
-  let ball = {x_axis: half_screen_width-5, y_axis: screen_height/2, speed: 90,
+  let ball = {x_axis: half_screen_width-5, y_axis: screen_height/2, speed: 150,
+              size: 10,
               x_direction: start_direction[0],
               y_direction: start_direction[1]};
   fix_canvas_proportions(my.canvas);
@@ -17,8 +19,8 @@ window.onload = ()=> {
 
   track_player_move(player);
   ball_move(ball);
-  check_ball_bounce(ball,screen_height,screen_width,player, computer);
-  render_game_screen({brush: my.brush, fps, player, computer, ball,
+  check_ball_bounce(ball, flipper_size, screen_height,screen_width,player, computer);
+  render_game_screen({brush: my.brush, fps, flipper_size, player, computer, ball,
                       screen_width, screen_height,
                       half_screen_width});
 }
@@ -125,10 +127,10 @@ let ball_move = (ball)=> {
   }, 1000/ball.speed );
 }
 
-let check_ball_bounce = (ball,screen_height,screen_width,player, computer)=> {
+let check_ball_bounce = (ball, flipper_size,screen_height,screen_width,player, computer)=> {
   setInterval(() => {
     check_if_ball_touching_wall(ball,screen_height,screen_width);
-    check_if_ball_touching_flipper(ball, screen_height, screen_width, player, computer);
+    check_if_ball_touching_flipper(ball, flipper_size, screen_height, screen_width, player, computer);
   }, 1000/ball.speed);
 }
 
@@ -137,15 +139,33 @@ let check_if_ball_touching_wall = (ball, screen_height, screen_width)=> {
   if(ball.x_axis >= screen_width || ball.x_axis <= 0) log("function 'score'");
 }
 
-let check_if_ball_touching_flipper = (ball, screen_height, screen_width, player, computer)=> {
+let check_if_ball_touching_flipper = (ball, flipper_size, screen_height, screen_width, player, computer)=> {
+  let ball_top = ball.y_axis;
+  let ball_bottom = ball.y_axis + ball.size;
   
-  if ((ball.x_axis < 11) &&(ball.y_axis >= player.y_position-39 && ball.y_axis <= player.y_position + 30 - 1)){
+  let player_top = player.y_position-flipper_size/2;
+  let player_bottom = player.y_position+flipper_size/2;
+
+  let computer_top = computer.y_position-flipper_size/2;
+  let computer_bottom = computer.y_position+flipper_size/2;
+  
+  if ((ball.x_axis < ball.size) && (ball_bottom >= player_top && ball_top <= player_bottom)){
+    
+    if ((ball_bottom <= player_top+ball.size && ball.y_direction > 0) || ( ball_top >= player_bottom-ball.size && ball.y_direction < 0)){
+      ball_bounce(ball,'y');
+    }
     ball_bounce(ball,'x');
   }
 
-  if ((ball.x_axis > screen_width -22) &&(ball.y_axis >= computer.y_position-39 && ball.y_axis <= computer.y_position + 30 - 1)){
+
+  if ((ball.x_axis > screen_width-ball.size*2) && (ball_bottom >= computer_top && ball_top <= computer_bottom)){
+    
+    if ((ball_bottom <= computer_top+ball.size && ball.y_direction > 0) || ( ball_top >= computer_bottom-ball.size && ball.y_direction < 0)){
+      ball_bounce(ball,'y');
+    }
     ball_bounce(ball,'x');
   }
+  
 }
 
 let ball_bounce = (ball,colision_position)=> {
@@ -155,7 +175,7 @@ let ball_bounce = (ball,colision_position)=> {
 
 }
 
-let render_game_screen = ({brush, fps, player, computer, ball,
+let render_game_screen = ({brush, fps, flipper_size, player, computer, ball,
                            screen_width, screen_height, half_screen_width})=> {
   setInterval(() => {
 
@@ -165,18 +185,18 @@ let render_game_screen = ({brush, fps, player, computer, ball,
 
     //player
     draw_flipper({brush, color:'#FFFFFF', 
-                  x_axis: 0, y_axis: player.y_position-30,
-                  width: 15, height: 60});
+                  x_axis: 0, y_axis: player.y_position-(flipper_size/2),
+                  width: ball.size, height: flipper_size});
     
     //computer
     draw_flipper({brush, color:'#FFFFFF', 
-                  x_axis: screen_width - 15, y_axis: computer.y_position-30,
-                  width: 15, height: 60});
+                  x_axis: screen_width - ball.size, y_axis: computer.y_position-(flipper_size/2),
+                  width: ball.size, height: flipper_size});
 
     //ball
     draw_ball({brush, color:'#FFFFFF', 
                x_axis: ball.x_axis, y_axis: ball.y_axis,
-               width: 10, height: 10});
+               width: ball.size, height: ball.size});
 
     set_brush_font({brush, font_size: 1.5, font_family: 'Quantico' })
     write_text({brush,  x_axis: 20, y_axis: 30, text: `${fps} fps`})
