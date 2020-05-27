@@ -6,9 +6,9 @@ window.onload = ()=> {
   let screen_height = window.innerHeight;
   let fps = 60;
   let player = {y_position: 300};
-  let computer = {y_position: 300};
+  let computer = {y_position: 500};
   let start_direction = random_start_direction()
-  let ball = {x_axis: half_screen_width-5, y_axis: screen_height/2, speed: 150,
+  let ball = {x_axis: half_screen_width-5, y_axis: screen_height/2, speed: 90,
               x_direction: start_direction[0],
               y_direction: start_direction[1]};
   fix_canvas_proportions(my.canvas);
@@ -17,6 +17,7 @@ window.onload = ()=> {
 
   track_player_move(player);
   ball_move(ball);
+  check_ball_bounce(ball,screen_height,screen_width,player, computer);
   render_game_screen({brush: my.brush, fps, player, computer, ball,
                       screen_width, screen_height,
                       half_screen_width});
@@ -124,7 +125,37 @@ let ball_move = (ball)=> {
   }, 1000/ball.speed );
 }
 
-let render_game_screen = ({brush, fps, player, ball,
+let check_ball_bounce = (ball,screen_height,screen_width,player, computer)=> {
+  setInterval(() => {
+    check_if_ball_touching_wall(ball,screen_height,screen_width);
+    check_if_ball_touching_flipper(ball, screen_height, screen_width, player, computer);
+  }, 1000/ball.speed);
+}
+
+let check_if_ball_touching_wall = (ball, screen_height, screen_width)=> {
+  if(ball.y_axis >= screen_height || ball.y_axis <= 0) ball_bounce(ball,'y');
+  if(ball.x_axis >= screen_width || ball.x_axis <= 0) log("function 'score'");
+}
+
+let check_if_ball_touching_flipper = (ball, screen_height, screen_width, player, computer)=> {
+  
+  if ((ball.x_axis < 11) &&(ball.y_axis >= player.y_position-39 && ball.y_axis <= player.y_position + 30 - 1)){
+    ball_bounce(ball,'x');
+  }
+
+  if ((ball.x_axis > screen_width -22) &&(ball.y_axis >= computer.y_position-39 && ball.y_axis <= computer.y_position + 30 - 1)){
+    ball_bounce(ball,'x');
+  }
+}
+
+let ball_bounce = (ball,colision_position)=> {
+
+  if(colision_position == 'x') return ball.x_direction *= -1;
+  if(colision_position == 'y') ball.y_direction *= -1;
+
+}
+
+let render_game_screen = ({brush, fps, player, computer, ball,
                            screen_width, screen_height, half_screen_width})=> {
   setInterval(() => {
 
@@ -139,7 +170,7 @@ let render_game_screen = ({brush, fps, player, ball,
     
     //computer
     draw_flipper({brush, color:'#FFFFFF', 
-                  x_axis: screen_width - 15, y_axis: 300,
+                  x_axis: screen_width - 15, y_axis: computer.y_position-30,
                   width: 15, height: 60});
 
     //ball
