@@ -19,8 +19,10 @@ window.onload = ()=> {
 
   track_player_move(player);
   ball_move(ball);
-  check_ball_bounce(ball, flipper_size, screen_height,screen_width,player, computer);
-  render_game_screen({brush: my.brush, fps, flipper_size, player, computer, ball,
+  check_ball_bounce(ball, flipper_size, screen_height,screen_width,player,
+                    computer);
+  render_game_screen({brush: my.brush, fps, flipper_size, player,
+                      computer, ball,
                       screen_width, screen_height,
                       half_screen_width});
 }
@@ -127,10 +129,12 @@ let ball_move = (ball)=> {
   }, 1000/ball.speed );
 }
 
-let check_ball_bounce = (ball, flipper_size,screen_height,screen_width,player, computer)=> {
+let check_ball_bounce = (ball, flipper_size, screen_height,screen_width,player,
+                         computer)=> {
   setInterval(() => {
     check_if_ball_touching_wall(ball,screen_height,screen_width);
-    check_if_ball_touching_flipper(ball, flipper_size, screen_height, screen_width, player, computer);
+    check_if_ball_touching_flipper(ball, flipper_size, screen_height,
+                                   screen_width, player, computer);
   }, 1000/ball.speed);
 }
 
@@ -139,7 +143,8 @@ let check_if_ball_touching_wall = (ball, screen_height, screen_width)=> {
   if(ball.x_axis >= screen_width || ball.x_axis <= 0) log("function 'score'");
 }
 
-let check_if_ball_touching_flipper = (ball, flipper_size, screen_height, screen_width, player, computer)=> {
+let check_if_ball_touching_flipper = (ball, flipper_size, screen_height, 
+                                      screen_width, player, computer)=> {
   let ball_top = ball.y_axis;
   let ball_bottom = ball.y_axis + ball.size;
   
@@ -148,19 +153,24 @@ let check_if_ball_touching_flipper = (ball, flipper_size, screen_height, screen_
 
   let computer_top = computer.y_position-flipper_size/2;
   let computer_bottom = computer.y_position+flipper_size/2;
-  
-  if ((ball.x_axis < ball.size) && (ball_bottom >= player_top && ball_top <= player_bottom)){
+
+  //player flipper
+  if ((ball.x_axis < ball.size) && 
+      (ball_bottom >= player_top && ball_top <= player_bottom)){
     
-    if ((ball_bottom <= player_top+ball.size && ball.y_direction > 0) || ( ball_top >= player_bottom-ball.size && ball.y_direction < 0)){
+    if ((ball_bottom <= player_top+ball.size && ball.y_direction > 0) || 
+        (ball_top >= player_bottom-ball.size && ball.y_direction < 0)){
       ball_bounce(ball,'y');
     }
     ball_bounce(ball,'x');
   }
 
-
-  if ((ball.x_axis > screen_width-ball.size*2) && (ball_bottom >= computer_top && ball_top <= computer_bottom)){
+  //computer flipper
+  if ((ball.x_axis > screen_width-ball.size*2) && 
+      (ball_bottom >= computer_top && ball_top <= computer_bottom)){
     
-    if ((ball_bottom <= computer_top+ball.size && ball.y_direction > 0) || ( ball_top >= computer_bottom-ball.size && ball.y_direction < 0)){
+    if ((ball_bottom <= computer_top+ball.size && ball.y_direction > 0) || 
+        (ball_top >= computer_bottom-ball.size && ball.y_direction < 0)){
       ball_bounce(ball,'y');
     }
     ball_bounce(ball,'x');
@@ -190,7 +200,8 @@ let render_game_screen = ({brush, fps, flipper_size, player, computer, ball,
     
     //computer
     draw_flipper({brush, color:'#FFFFFF', 
-                  x_axis: screen_width - ball.size, y_axis: computer.y_position-(flipper_size/2),
+                  x_axis: screen_width - ball.size,
+                  y_axis: computer.y_position-(flipper_size/2),
                   width: ball.size, height: flipper_size});
 
     //ball
