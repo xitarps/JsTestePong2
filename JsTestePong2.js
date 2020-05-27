@@ -1,11 +1,11 @@
 
 window.onload = ()=> {
   let my = setup_drawing_tools();
-  let screen_width = window.innerWidth;
-  let half_screen_width = screen_width/2;
-  let screen_height = window.innerHeight;
-  let fps = 60;
-  let flipper_size = 60;
+  const screen_width = window.innerWidth;
+  const half_screen_width = screen_width/2;
+  const screen_height = window.innerHeight;
+  const fps = 60;
+  const flipper_size = 60;
   let player = {y_position: 300};
   let computer = {y_position: 50};
   let start_direction = random_start_direction()
