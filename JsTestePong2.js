@@ -235,6 +235,8 @@ let render_game_screen = ({brush, fps, flipper_size, player, computer, ball,
          set_brush_color(brush,'#FFFFFF');
          let message = (score.player>score.computer)? 'You win :)!' : ' You lose :(';
          write_text({brush,  x_axis: screen_width/2-60, y_axis: screen_height/2, text: message });
+         message = 'Press F5 to play again';
+         write_text({brush,  x_axis: screen_width/2-120, y_axis: screen_height/2+30, text: message });
     }
 
   }, 1000/fps);
