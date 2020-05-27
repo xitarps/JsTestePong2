@@ -6,9 +6,10 @@ window.onload = ()=> {
   const screen_height = window.innerHeight;
   const fps = 60;
   const flipper_size = 60;
+  let score = {player: 0, computer: 0};
   let player = {y_position: 300};
   let computer = {y_position: 50};
-  let start_direction = random_start_direction()
+  let start_direction = random_start_direction();
   let ball = {x_axis: half_screen_width-5, y_axis: screen_height/2, speed: 150,
               size: 10,
               x_direction: start_direction[0],
@@ -20,11 +21,11 @@ window.onload = ()=> {
   track_player_move(player);
   ball_move(ball);
   check_ball_bounce(ball, flipper_size, screen_height,screen_width,player,
-                    computer);
+                    computer, score);
   render_game_screen({brush: my.brush, fps, flipper_size, player,
                       computer, ball,
                       screen_width, screen_height,
-                      half_screen_width});
+                      half_screen_width, score});
 }
 
 const log = (what = '', where = 'console')=> {
@@ -77,13 +78,13 @@ let draw_field = ({brush, field_color, lines_color, width, height, half})=> {
 let draw_flipper = ({brush, color, x_axis, y_axis, width, height})=> {
   set_brush_color(brush, color);
   draw_rectangle({brush, x_axis, y_axis,
-                  width, height})
+                  width, height});
 }
 
 let draw_ball = ({brush, color, x_axis, y_axis, width, height})=> {
   set_brush_color(brush, color);
   draw_rectangle({brush, x_axis, y_axis,
-                  width, height})
+                  width, height});
 }
 
 let track_player_move = (player)=> {
@@ -120,27 +121,37 @@ let random_start_direction = ()=> {
   return arr;
 }
 
+let score_treatment = (ball, score, screen_height, screen_width)=> {
+  set_ball_in_the_middle(ball, screen_height, screen_width)
+  
+}
+let set_ball_in_the_middle= (ball, screen_height, screen_width)=>{
+  ball.x_axis = (screen_width/2)-(ball.size/2);
+  ball.y_axis = screen_height/2;
+}
+
 let ball_move = (ball)=> {
   setInterval(() => {
     
-    ball.x_axis = ball.x_axis + ball.x_direction
-    ball.y_axis = ball.y_axis + ball.y_direction
+    ball.x_axis = ball.x_axis + ball.x_direction;
+    ball.y_axis = ball.y_axis + ball.y_direction;
 
   }, 1000/ball.speed );
 }
 
 let check_ball_bounce = (ball, flipper_size, screen_height,screen_width,player,
-                         computer)=> {
+                         computer, score)=> {
   setInterval(() => {
-    check_if_ball_touching_wall(ball,screen_height,screen_width);
+    check_if_ball_touching_wall(ball,screen_height,screen_width, score);
     check_if_ball_touching_flipper(ball, flipper_size, screen_height,
                                    screen_width, player, computer);
   }, 1000/ball.speed);
 }
 
-let check_if_ball_touching_wall = (ball, screen_height, screen_width)=> {
+let check_if_ball_touching_wall = (ball, screen_height, screen_width, score)=> {
   if(ball.y_axis >= screen_height || ball.y_axis <= 0) ball_bounce(ball,'y');
-  if(ball.x_axis >= screen_width || ball.x_axis <= 0) log("function 'score'");
+  if(ball.x_axis >= screen_width){score.player++; score_treatment(ball, score, screen_height, screen_width)}
+  if(ball.x_axis <= 0){score.computer++; score_treatment(ball, score, screen_height, screen_width)}
 }
 
 let check_if_ball_touching_flipper = (ball, flipper_size, screen_height, 
@@ -186,7 +197,8 @@ let ball_bounce = (ball,colision_position)=> {
 }
 
 let render_game_screen = ({brush, fps, flipper_size, player, computer, ball,
-                           screen_width, screen_height, half_screen_width})=> {
+                           screen_width, screen_height, half_screen_width,
+                           score})=> {
   setInterval(() => {
 
     draw_field({brush, field_color: '#081605',
@@ -209,8 +221,10 @@ let render_game_screen = ({brush, fps, flipper_size, player, computer, ball,
                x_axis: ball.x_axis, y_axis: ball.y_axis,
                width: ball.size, height: ball.size});
 
-    set_brush_font({brush, font_size: 1.5, font_family: 'Quantico' })
-    write_text({brush,  x_axis: 20, y_axis: 30, text: `${fps} fps`})
+    set_brush_font({brush, font_size: 1.5, font_family: 'Quantico' });
+    write_text({brush,  x_axis: 20, y_axis: 30, text: `${fps} fps`});
+    write_text({brush,  x_axis: half_screen_width-150, y_axis: 70, text: `Player: ${score.player}`});
+    write_text({brush,  x_axis: half_screen_width+30, y_axis: 70, text: `Computer: ${score.computer}`});
 
   }, 1000/fps);
 }
